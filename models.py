@@ -1,7 +1,6 @@
 from tensorflow import keras
 from keras.models import Model
-from keras import Input, layers
-from keras.layers import Embedding
+from keras import layers
 import tensorflow as tf
 # import h5py
 

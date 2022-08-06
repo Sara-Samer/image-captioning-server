@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, jsonify, request
 # if you encounter dependency issues using 'pip install flask-uploads'
 # try 'pip install Flask-Reuploaded'
 from flask_uploads import UploadSet, configure_uploads, IMAGES
@@ -51,7 +51,7 @@ def upload():
     caption = infer_caption(img_path)
     os.remove(img_path)
     # the answer which will be rendered back to the user
-    return {'caption': caption}
+    return jsonify({'caption': caption})
     # web page to show before the POST request containing the image
 
 # @app.route("/im_size", methods=["POST"])
