@@ -1,4 +1,4 @@
-from models import Decoder, Encoder
+from models import Decoder, Encoder, get_cnn_model
 import tensorflow as tf
 from tensorflow import keras
 from keras.models import Model
@@ -18,7 +18,7 @@ decoder.load_weights('weights/decoder/dec')
 encoder = Encoder(embedding_dim)
 encoder.load_weights('weights/encoder/enc')
 
-with open('tokenizer.pickle', 'rb') as handle:
+with open('weights/tokenizer.pickle', 'rb') as handle:
     tokenizer = pickle.load(handle)
 
 def load_image(image_path):
@@ -38,6 +38,7 @@ def infer_caption(image):
     hidden = decoder.init_state(batch_size=1)
 
     temp_input = tf.expand_dims(load_image(image)[0], 0)  # process the input image to desired format before extracting features
+    image_features_extract_model = get_cnn_model()
     img_tensor_val = image_features_extract_model(temp_input)        # Extracting features using feature extraction model
     img_tensor_val = tf.reshape(img_tensor_val, (img_tensor_val.shape[0], -1, img_tensor_val.shape[3]))
 

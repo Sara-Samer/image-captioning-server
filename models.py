@@ -1,7 +1,9 @@
 from tensorflow import keras
 from keras.models import Model
 from keras import Input, layers
+from keras.layers import Embedding
 import tensorflow as tf
+# import h5py
 
 def get_cnn_model():
     image_model = tf.keras.applications.InceptionV3(include_top=False,weights='imagenet')
@@ -53,7 +55,7 @@ class Attention_model(Model):
         return context_vector, attention_weights
 
 class Decoder(Model):
-    def __init__(self, embed_dim, units, vocab_size):
+    def __init__(self, embedding_dim, units, vocab_size):
         super(Decoder, self).__init__()
         self.units=units
         self.attention = Attention_model(self.units)                # iniitalise the Attention model with units
