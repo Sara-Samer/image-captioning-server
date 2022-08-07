@@ -1,19 +1,18 @@
-from flask import Flask, render_template, jsonify, request
-# if you encounter dependency issues using 'pip install flask-uploads'
-# try 'pip install Flask-Reuploaded'
+from flask import Flask, render_template, jsonify, request, send_from_directory
 from flask_uploads import UploadSet, configure_uploads, IMAGES
-from inference import infer_caption
+from flask_gtts import gtts
+
 from models import get_cnn_model
-import os
+from inference import infer_caption
 from PIL import Image
+
 import base64
+import os
 import io
-# from keras.preprocessing.image import load_img
-# the pretrained model
-# from model import process_image, predict_class
+
 
 app = Flask(__name__)
-
+app_gtts = gtts(app)
 photos = UploadSet('photos', IMAGES)
 
 # path for saving uploaded images
@@ -23,14 +22,12 @@ configure_uploads(app, photos)
 # professionals have standards :p
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    welcome = "Hello, World !"
-    return welcome
+    return render_template('upload.html')
 
 # the main route for upload and prediction
 @app.route('/caption', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST' and 'photo' in request.files:
-        print('inferring')
         # save the image
 
         filename = photos.save(request.files['photo'])
@@ -45,8 +42,9 @@ def upload():
         encoded_img_data = base64.b64encode(data.getvalue())
 
         os.remove(img_path)
-
-        return render_template("caption.html", img_data=encoded_img_data.decode('utf-8'), caption=caption)
+        # app_gtts.say(text=caption)
+        # text_to_speech(caption)
+        return render_template("caption.html", img_data=encoded_img_data.decode('utf-8'), caption=caption, sayit= app_gtts.say)
 
     # web page to show before the POST request containing the image
     return render_template('upload.html')
@@ -63,7 +61,9 @@ def caption():
     return jsonify({'caption': caption})
     # web page to show before the POST request containing the image
 
-
+@app.route('/favicon.ico', methods=['GET'])
+def favicon():
+    return send_from_directory('static/logo', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 if __name__ == '__main__':
     get_cnn_model()

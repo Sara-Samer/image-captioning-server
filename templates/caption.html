@@ -47,12 +47,18 @@
                         />
                     </div>
                 </div>
-                <div
-                    class="col-12 col-md-6 justify-content-center d-flex align-items-center"
-                >
+                <iframe src="static/silence.mp3" allow="autoplay" id="audio" class="d-none"></iframe>
+                <div class="col-12 col-md-6 m-auto" style="text-align: center;">
                     <div class="my-auto">
                         <p>{{ caption }}</p>
+                        <audio id="player" autoplay controls>
+                            <source src="{{ sayit(text=caption)}}" type="audio/mp3">
+                        </audio>
                     </div>
+                    <hr/>
+                    <button class="btn btn-primary btn-sm btn-block" onclick="history.back()">
+                        reCaption!
+                    </button>
                 </div>
             </div>
         </div>

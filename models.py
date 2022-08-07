@@ -2,6 +2,8 @@ from tensorflow import keras
 from keras.models import Model
 from keras import layers
 import tensorflow as tf
+import pyttsx3
+
 # import h5py
 
 def get_cnn_model():
@@ -82,3 +84,27 @@ class Decoder(Model):
     
     def init_state(self, batch_size):
         return tf.zeros((batch_size, self.units))
+
+
+def text_to_speech(text):
+    """
+    Function to convert text to speech
+    :param text: text
+    :param gender: gender
+    :return: None
+    """
+
+    engine = pyttsx3.init()
+
+    # Setting up voice rate
+    engine.setProperty('rate', 125)
+
+    # Setting up volume level  between 0 and 1
+    engine.setProperty('volume', 0.8)
+
+    # Change voices: 0 for male and 1 for female
+    voices = engine.getProperty('voices')
+    engine.setProperty('voice', 1)
+
+    engine.say(text)
+    engine.runAndWait()
