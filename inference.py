@@ -9,7 +9,7 @@ import pickle
 embedding_dim = 256 
 units = 512
 #question
-vocab_size = 5001   #top 5,000 words +1
+vocab_size = 20001   #top 5,000 words +1
 max_length_caption = 39
 
 decoder = Decoder(embedding_dim, units, vocab_size)
